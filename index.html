@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12333D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>קוס 14–18.9</title>
+<style>
+:root{
+  --ink:#12333D; --ink-soft:#3D5B64; --chalk:#E9EDE9; --paper:#FBFAF6;
+  --line:#CBD4CE; --lemon:#E8B317; --tile:#A6472E; --olive:#6E7B4C;
+  --sea:#2E6F8E; --mustard:#C08A22; --coffee:#7A5540; --plum:#6D4C6E;
+  --r:10px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--chalk);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  font-size:16px;line-height:1.5;padding-bottom:78px}
+.wrap{max-width:660px;margin:0 auto}
+h1,h2,h3{margin:0;letter-spacing:-.015em}
+
+/* header + tabs */
+header{background:var(--ink);color:var(--paper);padding:18px 18px 0}
+h1{font-size:27px;font-weight:800}
+.dates{font-size:13.5px;color:#B9CBD1;margin-top:4px}
+nav{display:flex;gap:4px;margin-top:14px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;background:none;border:none;border-bottom:4px solid transparent;
+  color:#9FB6BD;font:inherit;font-size:15px;font-weight:700;padding:10px 12px;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--paper);border-bottom-color:var(--lemon)}
+section[role="tabpanel"]{padding:16px 18px 8px}
+section[hidden]{display:none}
+
+/* generic blocks */
+.block{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:12px}
+.block h2{font-size:17px;font-weight:800;margin-bottom:8px}
+.block h3{font-size:14.5px;font-weight:800;color:var(--ink-soft);margin:12px 0 5px}
+.block p{margin:0 0 8px;font-size:14.5px}
+.block p:last-child{margin-bottom:0}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:none}
+.kv span:last-child{font-weight:700;text-align:left;direction:ltr}
+.note{border-inline-start:4px solid var(--lemon);background:#FDF6E0;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0 0}
+.note b{display:block;margin-bottom:2px}
+.warn{border-inline-start:4px solid var(--tile);background:#F8ECE7}
+.warn b{color:var(--tile)}
+
+/* now tab */
+.hero{background:var(--ink);color:var(--paper);border-radius:var(--r);padding:18px;margin-bottom:12px}
+.hero .big{font-size:44px;font-weight:800;line-height:1;letter-spacing:-.03em}
+.hero .lab{font-size:13.5px;color:#B9CBD1;margin-top:6px}
+.hero .line{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16);font-size:14.5px}
+.hero .line b{color:var(--lemon)}
+.quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.quick button{flex:1 1 46%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  color:var(--paper);font:inherit;font-size:14px;font-weight:700;padding:10px;border-radius:8px;cursor:pointer}
+
+/* itinerary */
+.day{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.day.today{border-color:var(--lemon);border-width:2px}
+.dhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:13px 14px;background:#F2F4F0;border-bottom:1px solid var(--line);cursor:pointer}
+.dhead .t{font-size:16.5px;font-weight:800}
+.dhead .d{font-size:13px;color:var(--ink-soft);font-weight:700}
+.dbody{padding:6px 14px 14px}
+.item{display:flex;gap:11px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.item:last-child{border-bottom:none}
+.time{flex:0 0 52px;font-size:13px;font-weight:800;color:var(--sea);padding-top:2px;direction:ltr;text-align:right}
+.itxt{flex:1;min-width:0}
+.itxt .h{font-size:15.5px;font-weight:700}
+.itxt .p{font-size:14px;color:var(--ink-soft);margin-top:2px}
+.jump{display:inline-block;margin:6px 5px 0 0;background:var(--chalk);border:1px solid var(--line);
+  border-radius:14px;padding:4px 10px;font:inherit;font-size:12.5px;font-weight:700;color:var(--ink);cursor:pointer;direction:ltr}
+
+/* food */
+.moods{display:flex;gap:8px;overflow-x:auto;padding:0 0 12px;scrollbar-width:none}
+.moods::-webkit-scrollbar{display:none}
+.mood{flex:0 0 auto;background:var(--paper);border:1px solid var(--line);border-radius:22px;
+  padding:9px 15px;font:inherit;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer}
+.mood[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.searchrow{display:flex;gap:8px;align-items:center}
+input[type="search"]{flex:1;min-width:0;font:inherit;font-size:16px;padding:11px 13px;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--paper);color:var(--ink)}
+.btn{font:inherit;font-weight:700;font-size:14.5px;padding:11px 14px;cursor:pointer;border-radius:var(--r);
+  border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.frow{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0;align-items:center}
+.flabel{font-size:12.5px;color:var(--ink-soft);font-weight:700}
+.chip{font:inherit;font-size:13.5px;font-weight:600;padding:6px 11px;cursor:pointer;border-radius:20px;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink-soft)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.chip.cat[aria-pressed="true"]{background:var(--c);border-color:var(--c);color:#fff}
+select{font:inherit;font-size:13.5px;padding:6px 10px;border-radius:20px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.meta{display:flex;justify-content:space-between;align-items:center;padding:12px 0 6px;font-size:13px;color:var(--ink-soft)}
+.linkish{background:none;border:none;font:inherit;font-size:13px;color:var(--ink);text-decoration:underline;cursor:pointer;padding:4px}
+#pick{display:none;margin-bottom:10px}
+#pick.on{display:block}
+.pickbox{background:var(--lemon);border-radius:var(--r);padding:13px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pickbox .t{font-size:12.5px;font-weight:700;color:#6B5200}
+.pickbox .n{font-size:19px;font-weight:800;direction:ltr}
+.pickbox .d{font-size:13px;color:#5E4A05;margin-top:2px}
+.pickbox button{background:#12333D;color:#fff;border:none;border-radius:8px;padding:9px 12px;font:inherit;font-weight:700;font-size:13px;cursor:pointer;flex:0 0 auto}
+.card{background:var(--paper);border:1px solid var(--line);border-inline-start:5px solid var(--c);
+  border-radius:var(--r);padding:13px 14px;margin-bottom:10px}
+.card.hit{outline:3px solid var(--lemon);outline-offset:2px}
+.chead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.name{font-size:18.5px;font-weight:800;direction:ltr;text-align:right}
+.kind{font-size:12.5px;font-weight:700;color:var(--c);margin-top:1px}
+.fav{background:none;border:none;font-size:22px;line-height:1;cursor:pointer;padding:2px;color:var(--line)}
+.fav[aria-pressed="true"]{color:var(--tile)}
+.stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.stat{font-size:12.5px;font-weight:600;background:var(--chalk);border-radius:6px;padding:4px 8px}
+.stat.rate{background:#F4E6BC;color:#6B5200}
+.try{margin:10px 0 0;font-size:14.5px}
+.try b{color:var(--ink-soft)}
+.addr{margin:6px 0 0;font-size:13px;color:var(--ink-soft)}
+.acts{display:flex;gap:8px;margin-top:11px}
+.acts a,.acts button{flex:1;text-align:center;font:inherit;font-size:13.5px;font-weight:700;padding:9px 6px;
+  border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);text-decoration:none;cursor:pointer}
+.acts a{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.more{display:none;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line);font-size:14.5px}
+.more.open{display:block}
+.more p{margin:0 0 7px}
+.lab{font-weight:700;color:var(--ink-soft)}
+.empty{text-align:center;padding:36px 20px;color:var(--ink-soft)}
+.empty b{display:block;font-size:17px;color:var(--ink);margin-bottom:6px}
+
+/* checklist */
+.check{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+.check:last-child{border-bottom:none}
+.box{flex:0 0 22px;height:22px;border:2px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:14px;color:transparent;margin-top:1px}
+.check[aria-checked="true"] .box{background:var(--olive);border-color:var(--olive);color:#fff}
+.check[aria-checked="true"] .ctxt{text-decoration:line-through;color:var(--ink-soft)}
+.ctxt{font-size:14.5px}
+.ctxt small{display:block;color:var(--ink-soft);font-size:12.5px;text-decoration:none}
+
+/* phrases */
+.ph{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+.ph:last-child{border-bottom:none}
+.ph .gr{direction:ltr;text-align:left;font-weight:700}
+.ph .gr small{display:block;font-weight:400;color:var(--ink-soft)}
+
+.dock{position:fixed;inset-block-end:0;inset-inline:0;padding:10px 18px calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--chalk) 72%,rgba(233,237,233,0))}
+.dock .inner{max-width:660px;margin:0 auto;display:flex;gap:8px}
+.dock button{flex:1}
+:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>קוס — חופשה זוגית</h1>
+  <div class="dates">14–18 בספטמבר · 4 לילות · Blue Lagoon City Hotel</div>
+  <nav role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-p="now">עכשיו</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="plan">מסלול</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="food">אוכל</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="info">מידע</button>
+    <button class="tab" role="tab" aria-selected="false" data-p="prep">לפני הטיסה</button>
+  </nav>
+</header>
+
+<section role="tabpanel" id="p-now"></section>
+
+<section role="tabpanel" id="p-plan" hidden></section>
+
+<section role="tabpanel" id="p-food" hidden>
+  <div class="moods" id="moods" role="group" aria-label="בחירה לפי סיטואציה"></div>
+  <div class="searchrow">
+    <input type="search" id="q" placeholder="חיפוש לפי שם, מנה או רחוב" aria-label="חיפוש">
+    <button class="btn ghost" id="toggleFilters" aria-expanded="false">סינון</button>
+  </div>
+  <div id="filters" hidden>
+    <div class="frow" id="cats"><span class="flabel">סוג</span></div>
+    <div class="frow" id="areas"><span class="flabel">אזור</span></div>
+    <div class="frow" id="prices"><span class="flabel">מחיר</span></div>
+    <div class="frow">
+      <span class="flabel">סדר</span>
+      <select id="sort" aria-label="סדר תצוגה">
+        <option value="rating">דירוג — מהגבוה</option>
+        <option value="cheap">מחיר — מהזול</option>
+        <option value="reviews">כמות ביקורות</option>
+        <option value="name">שם א׳-ת׳</option>
+      </select>
+      <button class="chip" id="favOnly" aria-pressed="false">רק מועדפים</button>
+    </div>
+  </div>
+  <div class="meta"><span id="count"></span><button class="linkish" id="reset">ניקוי סינון</button></div>
+  <div id="pick"></div>
+  <div id="list"></div>
+</section>
+
+<section role="tabpanel" id="p-info" hidden></section>
+
+<section role="tabpanel" id="p-prep" hidden></section>
+
+</div>
+
+<div class="dock"><div class="inner">
+  <button class="btn" id="pickBtn">תבחר לי מקום</button>
+  <button class="btn ghost" id="topBtn">לראש העמוד</button>
+</div></div>
+
+<script>
+/* ================= DATA ================= */
+const CAT = {
+  taverna:{label:"טברנה יוונית", color:"#6E7B4C"},
+  fish:{label:"דגים ופירות ים", color:"#2E6F8E"},
+  chef:{label:"שף ובשרים", color:"#A6472E"},
+  street:{label:"אוכל רחוב", color:"#C08A22"},
+  coffee:{label:"קפה ובראנץ׳", color:"#7A5540"},
+  bar:{label:"בר וקינוחים", color:"#6D4C6E"}
+};
+const AREA = {old:"העיר העתיקה", sea:"טיילת הים והנמל", platanos:"כיכר פלאטאנוס", center:"מרכז העיר", zia:"כפר זיה"};
+const PRICE = {1:"€ עד ~12", 2:"€€ 15–35", 3:"€€€ 30 ומעלה"};
+
+const PLACES = [
+{n:"Hirodion Taverna",c:"taverna",a:"center",p:2,r:4.9,rv:4100,lo:12,hi:25,addr:"רחוב Artemisias 27",
+ try:"קלפטיקו טלה, מוסקה ביתית",desc:"טברנה משפחתית ותיקה ופופולרית מאוד. תבשילי טלה, מוסקה, בשרים על הגריל ודגים טריים.",
+ forWho:"טברנה יוונית קלאסית עם רמת שירות גבוהה ואוכל עקבי. הדירוג הגבוה בעיר."},
+{n:"MOM'S KITCHEN / Taverna Evdokia",c:"taverna",a:"old",p:1,r:4.7,rv:2300,lo:10,hi:20,addr:"רחוב Nafklirou 13, העיר העתיקה",
+ try:"מוסקה, עלי גפן ממולאים, לימונדה ביתית",desc:"בישול ביתי מסורתי, כולל מוסקה טבעונית ותבשילים.",
+ forWho:"אוכל פשוט וביתי, עם הרבה אפשרויות לצמחונים וטבעונים."},
+{n:"Kapari Meze Restaurant",c:"taverna",a:"old",p:2,r:4.7,rv:1600,lo:15,hi:30,addr:"כיכר דיאגוראס, העיר העתיקה",
+ try:"שרימפס שום, קציצות טלה",desc:"מסעדת מאזטים בכיכר מרוצפת. צלוחיות שיתוף, מוסקה וסלטים מקומיים.",
+ forWho:"ערב קיצי תחת מנורות ברחוב העתיק, עם הרבה מנות קטנות לשיתוף."},
+{n:"Ambrosia Meze",c:"taverna",a:"old",p:2,r:4.6,rv:1600,lo:10,hi:30,addr:"רחוב Kolokotroni, כיכר דיאגוראס",
+ try:"פלטת מיקס בשרים",desc:"מאזטים ים־תיכוניים, פלטות בשרים עשירות, דגים ומנות ראשונות יווניות.",
+ forWho:"קבוצות ומשפחות שרוצות פלטה גדולה בלב העיר העתיקה."},
+{n:"Socrates Taverna",c:"taverna",a:"sea",p:2,r:4.7,rv:2300,lo:15,hi:25,addr:"רחוב Riga Fereou 14, סמוך לנמל",
+ try:"סובלאקי, קלמרי מטוגן",desc:"טברנה משפחתית רחבה עם צזיקי וסלטים יווניים.",
+ forWho:"ארוחה מהירה וטעימה ליד הנמל, עם שירות זריז."},
+{n:"Plaza Traditional Greek Restaurant",c:"taverna",a:"old",p:2,r:4.8,rv:700,lo:15,hi:20,addr:"רחוב Sokratous 6",
+ try:"מנות נדיבות במיוחד",desc:"טברנה חמימה עם אירוח משפחתי ומנות גדולות.",forWho:"רעב אמיתי במחיר הגיוני."},
+{n:"Patriko",c:"taverna",a:"center",p:2,r:null,rv:null,lo:15,hi:30,addr:"רחוב Alikarnassou 35",
+ try:"גבינת Krasotyri מיושנת ביין, ציפורו",desc:"טברנת מאזטים בסמטה ציורית, עם גבינות מקומיות ומשקאות מסורתיים.",
+ forWho:"ערב מאזטים אותנטי הרחק מהתיירים."},
+{n:"Taverna Platanos",c:"taverna",a:"platanos",p:2,r:null,rv:null,lo:15,hi:30,addr:"כיכר פלאטאנוס, מתחת לעץ היפוקרטס",
+ try:"הישיבה עצמה, בצל עצי הדולב",desc:"מיקום היסטורי בצל עצי דולב ענקיים במרכז העיר העתיקה.",
+ forWho:"מי שבא בשביל האווירה והמקום, לא רק בשביל הצלחת."},
+{n:"Barbouni",c:"fish",a:"sea",p:3,r:4.6,rv:1800,lo:50,hi:70,addr:"רחוב Geor. Averof 26G, על קו המים",
+ try:"קרפצ׳יו לברק, ריזוטו דיו שחור",desc:"פיין־דיינינג של פירות ים וסושי על המים, עם פסטות פירות ים וקוקטיילים בשקיעה.",
+ forWho:"ערב רומנטי ומודרני על קו המים. חובה להזמין מקום מראש."},
+{n:"Astakos Seafood & Grill",c:"fish",a:"sea",p:3,r:4.7,rv:1100,lo:20,hi:45,addr:"רחוב Geor. Averof 16",
+ try:"לובסטר, שרימפס סגאנאקי, תמנון על האש",desc:"דגים ופירות ים טריים מול הים, עם דגה מקומית.",
+ forWho:"ארוחת דגים איכותית וקלאסית עם נוף מלא לים."},
+{n:"Yorgo Fish Restaurant",c:"fish",a:"sea",p:3,r:4.7,rv:1800,lo:20,hi:40,addr:"רחוב Geor. Averof 8",
+ try:"דגה טרייה יומית, בקלאווה ביתית",desc:"מוסד דגים ותיק על הטיילת, עם קלמרי פריך.",forWho:"דגים בסגנון יווני קלאסי, בלי גימיקים."},
+{n:"Sardelles",c:"fish",a:"sea",p:2,r:4.6,rv:1600,lo:15,hi:35,addr:"רחוב Geor. Averof 19",
+ try:"סרדינים מטוגנים, תמנון",desc:"מסעדת דגים בניהול משפחה מקומית, עם מוזיקה יוונית חיה.",
+ forWho:"ערב יווני רועש ומהנה עם דגים במחיר שפוי."},
+{n:"Fish House Taverna",c:"fish",a:"sea",p:3,r:4.6,rv:1200,lo:15,hi:40,addr:"רחוב Riga Fereou, בראש המדרגות מעל הנמל",
+ try:"הנוף מהמרפסת אל הנמל",desc:"טברנת דגים מסורתית משנת 1992 במיקום ציורי המשקיף על הנמל.",
+ forWho:"התמונה הכי יפה של הערב, עם אוכל טוב לצידה."},
+{n:"Nick the Fisherman",c:"fish",a:"sea",p:2,r:4.3,rv:1600,lo:15,hi:35,addr:"רחוב Antimachou 4, סמוך לנמל",
+ try:"בחירת דג טרי לפי משקל מהוויטרינה",desc:"מסעדת דגים קלאסית שבה בוחרים את הדג ישירות מהתצוגה.",
+ forWho:"מי שרוצה לבחור בעצמו את הדג. שווה לשאול על המחיר לקילו לפני."},
+{n:"Broadway Restaurant",c:"chef",a:"center",p:3,r:null,rv:null,lo:30,hi:60,addr:"רחוב Megalou Alexandrou 36",
+ try:"ריזוטו פטריות וכמהין, סטייק מיושן",desc:"מטבח שף יצירתי ומודרני, פסטות בעבודת יד ומנות פיוז׳ן.",
+ forWho:"חוויה קולינרית שונה מטברנה רגילה."},
+{n:"Koako",c:"chef",a:"sea",p:2,r:4.7,rv:830,lo:15,hi:40,addr:"רחוב Vasileos Georgiou V' 22",
+ try:"קוקטייל בשקיעה בגינה",desc:"מסעדה ובר על חוף הים עם גינה יפה, בין מנות יווניות קלאסיות למודרניות.",
+ forWho:"ערב נינוח על הים שמתחיל בארוחה וממשיך לדרינק."},
+{n:"Sunset Taverna",c:"chef",a:"center",p:2,r:null,rv:null,lo:20,hi:40,addr:"רחוב Ethelonton Palaion Polemiston 53",
+ try:"נתחי T-Bone ו־Ribeye על האש",desc:"התמחות בבשרים על האש לצד תבשילים יווניים.",forWho:"ערב בשרים כשנמאס מדגים ומזטים."},
+{n:"Avlo-Gyros",c:"street",a:"old",p:1,r:null,rv:null,lo:4,hi:5,addr:"מרכז העיר העתיקה",
+ try:"פיתה ג׳יירוס עם צ׳יפס בפנים",desc:"ג׳יירוס עוף או חזיר בפיתה, עם צזיקי ועגבנייה. סביב €4–€5.",
+ forWho:"ארוחה מהירה, זולה ומשביעה תוך כדי הליכה."},
+{n:"Gyros Grill by Vassilis",c:"street",a:"center",p:1,r:null,rv:null,lo:4,hi:8,addr:"מרכז העיר",
+ try:"סובלאקי עסיסי",desc:"מוסד גריל מוכר לסובלאקי וג׳יירוס.",forWho:"אחרי ים או לפני יציאה בערב."},
+{n:"The Cup",c:"coffee",a:"center",p:1,r:4.8,rv:660,lo:2,hi:6,addr:"רחוב Vasileos Pavlou 22",
+ try:"פרדו אספרסו, קולד ברו",desc:"בית קפה גל שלישי עם פולים חד־זניים מאתיופיה, קולומביה וקניה, וחלופות חלב.",
+ forWho:"חובבי קפה שרוצים אספרסו מדויק ולא נסקפה."},
+{n:"Alchimion Coffee and Brunch",c:"coffee",a:"center",p:1,r:4.8,rv:375,lo:5,hi:12,addr:"רחוב Vasileos Pavlou 33",
+ try:"קגיאנס — מקושקשת יוונית עם פטה ועגבניות",desc:"בית קפה ובראנץ׳ מודרני, טוסט אבוקדו, פנקייקים וקפה מיוחד.",
+ forWho:"בראנץ׳ מלא שפותח את היום."},
+{n:"Royal Cafe Kos",c:"coffee",a:"center",p:1,r:4.8,rv:230,lo:5,hi:10,addr:"רחוב Navarinou 14",
+ try:"לובסטר רול, קפה קר",desc:"ארוחות בוקר מגוונות וכריכים טריים.",forWho:"בוקר קליל בלי להתחייב לארוחה גדולה."},
+{n:"Cafe Neratzia",c:"coffee",a:"platanos",p:1,r:4.7,rv:480,lo:5,hi:10,addr:"כיכר פלאטאנוס, ליד מבצר נראנציה",
+ try:"יוגורט יווני עם גרנולה ודבש, ספנקופיטה",desc:"בית קפה בצל עצים עתיקים, עם מאפים ומיצים טבעיים.",
+ forWho:"הפסקה מוצלת באמצע סיור בעיר העתיקה."},
+{n:"Lemon",c:"coffee",a:"old",p:1,r:4.8,rv:830,lo:3,hi:8,addr:"רחוב Riga Fereou 2, העיר העתיקה",
+ try:"לימונדה ביתית, פראפה יווני",desc:"מפורסם בלימונדה הביתית, לצד עוגת תפוחים ומאפים מתוקים.",
+ forWho:"עצירה קרה וקצרה ביום חם."},
+{n:"More Cafe Bar",c:"bar",a:"old",p:1,r:4.7,rv:560,lo:5,hi:15,addr:"רחוב Kolokotroni / Filita, העיר העתיקה",
+ try:"שייקים וקוקטיילים",desc:"קפה־בר בפינה ירוקה ומוצלת, עם ארוחות קלות לאורך היום והערב.",
+ forWho:"מקום אחד שעובד גם אחרי הצהריים וגם בערב."},
+{n:"Kaseta All-Day Cafe Bar",c:"bar",a:"sea",p:2,r:null,rv:null,lo:5,hi:20,addr:"טיילת הנמל, Akti Miaouli 4",
+ try:"בירות בוטיק וקוקטייל בשקיעה",desc:"קפה רגוע בבוקר שהופך ללאונג׳־בר עם מוזיקה טובה בערב.",forWho:"תחילת ערב על הנמל."},
+{n:"Ciao Cafe Bistro",c:"bar",a:"old",p:2,r:null,rv:null,lo:10,hi:25,addr:"רחוב Ifestou, לב העיר העתיקה",
+ try:"פיצה מטאבון עצים, קנלדה",desc:"ביסטרו איטלקי־יווני עם פיצות מטאבון וקינוחים.",forWho:"ערב שבו לא מתחשק אוכל יווני."},
+{n:"Special Ice Cream & Gelato di Nonna",c:"bar",a:"sea",p:1,r:null,rv:null,lo:3,hi:8,addr:"סמוך לטיילת ולכיכר המרכזית",
+ try:"ג׳לאטו בייצור יומי, וופל בלגי",desc:"גלידות איטלקיות טריות וקינוחים קרים.",forWho:"הסיבוב שאחרי הארוחה."},
+{n:"Oromedon",c:"chef",a:"zia",p:2,r:null,rv:null,lo:20,hi:40,addr:"כפר זיה, במעלה ההר",
+ try:"שולחן על המרפסת בזמן השקיעה",desc:"מסעדת הנוף המוכרת של זיה, עם מרפסת שצופה על האי ועל הים לכיוון השקיעה.",
+ forWho:"ערב השקיעה בזיה. חובה להזמין שולחן מראש ולבקש במפורש שולחן בשורה הראשונה."}
+];
+
+const MOODS = [
+  {id:"breakfast",label:"בוקר וקפה",test:p=>p.c==="coffee"},
+  {id:"quick",label:"רעב עכשיו",test:p=>p.c==="street"||["Socrates Taverna","MOM'S KITCHEN / Taverna Evdokia"].includes(p.n)},
+  {id:"sea",label:"דגים מול הים",test:p=>p.c==="fish"},
+  {id:"date",label:"ערב מפנק",test:p=>["Barbouni","Broadway Restaurant","Koako","Fish House Taverna","Astakos Seafood & Grill","Oromedon"].includes(p.n)},
+  {id:"classic",label:"טברנה קלאסית",test:p=>p.c==="taverna"},
+  {id:"cheap",label:"בזול",test:p=>p.p===1},
+  {id:"sweet",label:"מתוק ודרינק",test:p=>p.c==="bar"},
+  {id:"veg",label:"צמחוני",test:p=>["MOM'S KITCHEN / Taverna Evdokia","Cafe Neratzia","Ciao Cafe Bistro","Alchimion Coffee and Brunch"].includes(p.n)}
+];
+
+const DAYS = [
+{date:"2026-09-14",dow:"יום שני",title:"נחיתה, התמקמות וערב בעיר העתיקה",sunset:"19:24",
+ items:[
+  {t:"08:35",h:"טיסה BZ802 מנתב״ג",p:"נחיתה בקוס 10:15. משך הטיסה כשעה ו־40 דקות."},
+  {t:"10:30",h:"מהשדה לעיר",p:"אוטובוס KTEL מחוץ לטרמינל, כ־4€ לאדם, כ־40 דקות, ומשם 5 דקות הליכה למלון. חלופה: מונית 35€–40€, כ־25 דקות."},
+  {t:"12:00",h:"צ׳ק־אין או השארת מזוודות",p:"רוב המלונות מכניסים לחדר רק ב־14:00–15:00. משאירים תיקים בקבלה ויוצאים."},
+  {t:"12:30",h:"סים לחן ב־Cosmote / Germanos",p:"ברחוב Venizelou Eleftheriou, כ־4 דקות הליכה. חבילת תיירים 12€–15€. חובה דרכון פיזי שלה."},
+  {t:"13:15",h:"ארוחת צהריים קלה",p:"ג׳יירוס מהיר או ישיבה ליד הנמל.",places:["Avlo-Gyros","Socrates Taverna"]},
+  {t:"15:30",h:"סיבוב היכרות רגלי",p:"נמל קוס, עץ היפוקרטס, מבצר נראנציה והאגורה העתיקה — הכל בטווח הליכה מהמלון."},
+  {t:"20:30",h:"ארוחת ערב ראשונה בסמטאות",p:"פתיחת חופשה בטברנה מסורתית, וגלידה על הטיילת בדרך חזרה.",places:["Hirodion Taverna","Kapari Meze Restaurant"]}
+ ],
+ tips:[{k:"note",b:"סדרו את יום שלישי כבר היום",t:"הזמנת ההפלגה ל־3 האיים נסגרת בדוכנים שעל הרציף עד הערב שלפני. תוך כדי הסיבוב בנמל עוברים בין שתיים־שלוש ספינות, שואלים מחיר ושעת חזרה, ומזמינים לבוקר."},
+       {k:"note",b:"הזמינו שולחנות מראש",t:"Barbouni ליום חמישי ו־Oromedon בזיה ליום רביעי — שניהם מתמלאים. שיחה קצרה או הודעה היום פותרת את זה."}]},
+
+{date:"2026-09-15",dow:"יום שלישי",title:"שיט ל־3 האיים",sunset:"19:22",
+ items:[
+  {t:"08:45",h:"הליכה לרציף ההפלגות",p:"5–7 דקות מהמלון. עולים על הספינה לקלימנוס, פלאטי ופסרימוס."},
+  {t:"09:15",h:"יציאה",p:"רוב הספינות יוצאות בין 09:00 ל־09:30 וחוזרות סביב 17:00."},
+  {t:"במהלך",h:"שחייה בעצירות ואוכל על הסיפון",p:"ארוחת צהריים קלה מוגשת בדרך כלל בהפלגה. שווה לקחת כובע, מים וקרם הגנה — אין הרבה צל."},
+  {t:"17:00",h:"חזרה, מקלחת ומנוחה",p:"היום הזה שורף אנרגיה יותר ממה שנדמה. שעה של כלום במלון היא חלק מהתוכנית."},
+  {t:"20:30",h:"דגים על הטיילת",p:"ארוחת ערב מול המים.",places:["Yorgo Fish Restaurant","Astakos Seafood & Grill"]}
+ ],
+ tips:[{k:"warn",b:"היום היחיד שתלוי במזג אוויר",t:"רוח המלטמי נושבת בים האגאי גם בספטמבר ויכולה לבטל או לטלטל הפלגות. אם התחזית מראה רוח חזקה — מחליפים בין יום שלישי ליום רביעי בלי להתווכח, ומפליגים ביום הרגוע יותר."},
+       {k:"note",b:"שאלו על שעת החזרה המדויקת",t:"ההבדל בין ספינה שחוזרת ב־16:30 לאחת שחוזרת ב־18:00 הוא ההבדל בין ערב רגוע לערב דחוס."}]},
+
+{date:"2026-09-16",dow:"יום רביעי",title:"חוף טיגאקי ושקיעה בזיה",sunset:"19:20",
+ items:[
+  {t:"09:30",h:"אוטובוס לטיגאקי",p:"מהתחנה המרכזית ליד המלון. רצועת חול רחבה עם מים רדודים וצלולים."},
+  {t:"13:00",h:"צהריים על קו המים",p:"נשנוש ובירה באחת הטברנות שעל החוף."},
+  {t:"16:00",h:"חזרה למלון והתרעננות",p:"מוקדם יותר ממה שמתחשק — כדי לתפוס את האוטובוס לזיה בנחת."},
+  {t:"17:15",h:"אוטובוס לכפר זיה",p:"עלייה להרי דיקאוס. הנסיעה עצמה יפה."},
+  {t:"18:15",h:"סמטאות זיה, דבש ותבלינים",p:"מגיעים לפני השקיעה, מסתובבים, ואז מתיישבים."},
+  {t:"19:20",h:"שקיעה עם ארוחה ויין",p:"השקיעה המפורסמת של האי.",places:["Oromedon"]}
+ ],
+ tips:[{k:"warn",b:"הדבר הכי חשוב ביום הזה: האוטובוס האחרון מזיה",t:"קווי האוטובוס לזיה דלילים ומשתנים לפי עונה, והאחרון חוזר לא מאוחר. בררו את שעת החזרה מול הנהג או בתחנה כבר בעלייה, לפני שמזמינים אוכל. תוכנית גיבוי: מונית חזרה לעיר קוס, בסביבות 35€–40€, ושווה לבקש מהמסעדה שיזמינו אחת."},
+       {k:"note",b:"היום הכי עמוס בתוכנית",t:"חוף בבוקר ועלייה להר בערב זה שני טיולים ביום אחד. אם בא לכם פחות, זיה עומדת מצוין גם בפני עצמה — אפשר לוותר על טיגאקי ולעלות בשלוש אחר הצהריים."},
+       {k:"note",b:"קחו שכבה",t:"זיה נמצאת בגובה כ־800 מטר. אחרי השקיעה יורדות שם בקלות 6–8 מעלות לעומת העיר, ובמרפסת יש רוח."}]},
+
+{date:"2026-09-17",dow:"יום חמישי",title:"אופניים, חוף לאמבי וערב אחרון",sunset:"19:18",
+ items:[
+  {t:"09:00",h:"שוכרים אופניים ליד המלון",p:"כ־5€ ליום לאופניים עירוניים. שווה לבדוק בלמים וגובה אוכף לפני שיוצאים."},
+  {t:"09:30",h:"רכיבה לחוף לאמבי",p:"שביל חוף מישורי וסלול לכל אורך הדרך, בערך 10–15 דקות רכיבה."},
+  {t:"10:00",h:"יום חוף",p:"מיטות שיזוף, פרדו אספרסו, שחייה ובטן־גב."},
+  {t:"15:30",h:"האסקלפיון",p:"תוספת שלי לתוכנית: מרכז הריפוי העתיק של היפוקרטס, כ־4 ק״מ מהעיר. אפשר להגיע באותם אופניים או ברכבת התיירים מהנמל. שעה וחצי במקום מספיקה, והנוף מהמדרגות העליונות אל טורקיה שווה את העלייה."},
+  {t:"17:30",h:"קניות אחרונות בסמטאות",p:"גבינת Krasotyri, דבש, תבלינים ומזכרות. השוק העירוני נסגר יחסית מוקדם."},
+  {t:"20:30",h:"ערב סיום על קו המים",p:"הארוחה החגיגית של החופשה.",places:["Barbouni","Koako"]}
+ ],
+ tips:[{k:"note",b:"האסקלפיון נסגר מוקדם",t:"אתרים ארכיאולוגיים ביוון נוהגים להיסגר באמצע אחר הצהריים, ושעות הפתיחה משתנות בין העונות. בדקו את שעת הסגירה של אותו יום לפני שיוצאים, ואם היא מוקדמת מדי — הפכו את הסדר ועשו את האסקלפיון בבוקר."},
+       {k:"note",b:"ארזו הערב",t:"טיסה ב־12:05 עם יציאה מהמלון בבוקר. מזוודה סגורה מראש חוסכת את הבוקר היחיד שאפשר עוד ליהנות ממנו."}]},
+
+{date:"2026-09-18",dow:"יום שישי",title:"פרידה וחזרה הביתה",sunset:"19:16",
+ items:[
+  {t:"08:00",h:"ארוחת בוקר וצ׳ק־אאוט",p:"בנחת. אפשר להשאיר מזוודות בקבלה ולעשות סיבוב אחרון על הנמל."},
+  {t:"09:15",h:"יציאה לשדה KGS",p:"אוטובוס ישיר או מונית. הקדמתי ברבע שעה לעומת התוכנית המקורית — טיסה בינלאומית ב־12:05, ורצוי להיות בשדה סביב 10:00."},
+  {t:"12:05",h:"טיסה BZ801 לתל אביב",p:"נחיתה בנתב״ג 13:45."}
+ ],
+ tips:[{k:"note",b:"אירו שנשארו",t:"קוס היא נקודה טובה לגמור מזומן על גבינות ודבש בשוק, במקום להחזיר שטרות הביתה או להמיר בעמלה."}]}
+];
+
+const CHECK = [
+ {t:"להתקין את ה־eSIM עוד בארץ",s:"Maya Mobile או Airalo, 3–5GB. ההתקנה דורשת אינטרנט — לא לחכות לנחיתה"},
+ {t:"הדרכון הפיזי של חן בתיק היד",s:"נדרש בחנות הסלולר בקוס לרישום הסים"},
+ {t:"להוריד מפת קוס לשימוש אופליין",s:"ב־Google Maps: חיפוש Kos ← Download offline map. חוסך תלות בקליטה"},
+ {t:"להוסיף את הקובץ הזה למסך הבית",s:"בספארי: Share ← Add to Home Screen"},
+ {t:"200€ מזומן, כולל שטרות קטנים",s:"אוטובוסים, אופניים, מיטות שיזוף וטיפים"},
+ {t:"לוודא שכרטיס האשראי בלי עמלות מט״ח פעיל לחו״ל",s:"ושיש כרטיס גיבוי שני, לא באותו ארנק"},
+ {t:"להזמין שולחן ב־Barbouni ליום חמישי",s:"וגם Oromedon בזיה ליום רביעי"},
+ {t:"מתאם שקע אירופי",s:"שקעים ביוון הם Type C/F. תקע ישראלי בעל שני פינים עגולים מתאים, מטען עם פין שלישי לא"},
+ {t:"קרם הגנה, כובע ומשקפי שמש",s:"יום ההפלגה כמעט בלי צל"},
+ {t:"דוחה יתושים",s:"ספטמבר על האי עדיין יתושי, במיוחד סביב הטיילת בערב"},
+ {t:"צילום מסך של כרטיסי העלייה למטוס ואישור המלון",s:"למקרה שאין קליטה בשדה"},
+ {t:"תרופות אישיות בתיק היד",s:"וגם משהו בסיסי לבטן — לא תמיד נעים לחפש בית מרקחת בערב"}
+];
+
+const PHRASES = [
+ ["שלום","Γεια σας","Yia sas"],
+ ["תודה","Ευχαριστώ","Efharistó"],
+ ["בבקשה / סליחה","Παρακαλώ","Parakaló"],
+ ["החשבון בבקשה","Τον λογαριασμό παρακαλώ","Ton logariasmó parakaló"],
+ ["מים מהברז בבקשה","Νερό βρύσης","Neró vrísis"],
+ ["כמה זה עולה?","Πόσο κάνει;","Póso káni?"],
+ ["טעים מאוד","Πολύ νόστιμο","Polí nóstimo"],
+ ["לחיים","Γεια μας","Yia mas"]
+];
+
+/* ================= STATE ================= */
+const state={mood:null,cats:new Set(),areas:new Set(),prices:new Set(),q:"",sort:"rating",
+  favOnly:false,favs:new Set(),done:new Set(),tab:"now"};
+
+/* שמירה: קודם מנסים את אחסון המארח, ואם אין — localStorage של הדפדפן */
+async function readKey(k){
+  try{const r=await window.storage.get("kos:"+k); if(r&&r.value) return r.value;}catch(e){}
+  try{return localStorage.getItem("kos:"+k);}catch(e){}
+  return null;
+}
+async function load(){
+  const a=await readKey("favs"); if(a){try{JSON.parse(a).forEach(x=>state.favs.add(x));}catch(e){}}
+  const b=await readKey("done"); if(b){try{JSON.parse(b).forEach(x=>state.done.add(x));}catch(e){}}
+}
+async function save(k,set){
+  const v=JSON.stringify([...set]);
+  try{ localStorage.setItem("kos:"+k,v); }catch(e){}
+  try{ await window.storage.set("kos:"+k,v); }catch(e){}
+}
+
+/* ================= HELPERS ================= */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byName=n=>PLACES.find(p=>p.n===n);
+function priceText(p){return p.lo===p.hi?"€"+p.lo:"€"+p.lo+"–€"+p.hi;}
+function todayISO(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function dayIndexToday(){return DAYS.findIndex(d=>d.date===todayISO());}
+function daysTo(dateStr){
+  const t=new Date(); t.setHours(0,0,0,0);
+  const d=new Date(dateStr+"T00:00:00");
+  return Math.round((d-t)/86400000);
+}
+function tipHTML(tips){
+  return (tips||[]).map(x=>'<div class="note'+(x.k==="warn"?" warn":"")+'"><b>'+esc(x.b)+'</b>'+esc(x.t)+'</div>').join("");
+}
+function placeChips(names){
+  return (names||[]).map(n=>'<button class="jump" data-place="'+esc(n)+'">'+esc(n)+'</button>').join("");
+}
+
+/* ================= TABS ================= */
+function setTab(id){
+  state.tab=id;
+  document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected", b.dataset.p===id?"true":"false"));
+  ["now","plan","food","info","prep"].forEach(p=>{
+    const el=document.getElementById("p-"+p);
+    if(p===id) el.removeAttribute("hidden"); else el.setAttribute("hidden","");
+  });
+  document.querySelector(".dock").style.display = id==="food" ? "" : "none";
+  window.scrollTo({top:0});
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setTab(b.dataset.p));
+
+/* ================= NOW ================= */
+function eatNow(){
+  const h=new Date().getHours();
+  if(h>=6&&h<11)  return ["בוקר — קפה או בראנץ׳","The Cup","Alchimion Coffee and Brunch"];
+  if(h>=11&&h<16) return ["צהריים — משהו מהיר","Avlo-Gyros","Socrates Taverna"];
+  if(h>=16&&h<19) return ["אחר הצהריים — קפה או שקיעה","Koako","Cafe Neratzia"];
+  if(h>=19&&h<23) return ["ערב — בדיוק כשהמקומיים יוצאים","Hirodion Taverna","Astakos Seafood & Grill"];
+  return ["מאוחר — רוב המטבחים סגורים","Kaseta All-Day Cafe Bar","Special Ice Cream & Gelato di Nonna"];
+}
+function renderNow(){
+  const i=dayIndexToday(), el=document.getElementById("p-now");
+  const [lab,a,b]=eatNow();
+  const t=new Date().toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+  let hero;
+  if(i>=0){
+    const d=DAYS[i];
+    hero='<div class="hero"><div class="big">'+d.dow+'</div>'+
+      '<div class="lab">'+esc(d.title)+' · שקיעה ב־'+d.sunset+'</div>'+
+      '<div class="line">'+t+' · '+esc(lab)+'</div>'+
+      '<div class="quick"><button data-place="'+esc(a)+'">'+esc(a)+'</button><button data-place="'+esc(b)+'">'+esc(b)+'</button></div></div>';
+  }else{
+    const dd=daysTo(DAYS[0].date);
+    const left=state.done.size, total=CHECK.length;
+    hero='<div class="hero"><div class="big">'+(dd>0?dd:0)+'</div>'+
+      '<div class="lab">'+(dd>0?"ימים לטיסה · המראה ב־08:35 מנתב״ג":"החופשה מאחורינו")+'</div>'+
+      '<div class="line">רשימת ההכנות: <b>'+left+'/'+total+'</b> הושלמו</div>'+
+      '<div class="quick"><button data-go="prep">פתח את רשימת ההכנות</button><button data-go="plan">סקירת המסלול</button></div></div>';
+  }
+  const nextDay = i>=0 ? DAYS[i] : DAYS[0];
+  el.innerHTML = hero +
+    '<div class="block"><h2>'+(i>=0?"התוכנית להיום":"היום הראשון — "+nextDay.dow+" "+nextDay.title)+'</h2>'+
+    nextDay.items.map(it=>'<div class="item"><div class="time">'+esc(it.t)+'</div><div class="itxt"><div class="h">'+esc(it.h)+'</div><div class="p">'+esc(it.p)+'</div>'+placeChips(it.places)+'</div></div>').join("")+
+    tipHTML(nextDay.tips)+'</div>'+
+    '<div class="block"><h2>שלוש שאלות שחוזרות כל ערב</h2>'+
+    '<p><b>איפה אוכלים?</b> לשונית האוכל, כפתור "תבחר לי מקום".</p>'+
+    '<p><b>מזומן או אשראי?</b> אשראי בכל מסעדה. מזומן לאוטובוס, לאופניים, למיטות שיזוף ולטיפ.</p>'+
+    '<p><b>מתי יוצאים?</b> טברנה לפני 20:00 היא טברנה ריקה. השיא הוא 21:00–23:00.</p></div>';
+}
+
+/* ================= PLAN ================= */
+function renderPlan(){
+  const today=todayISO();
+  document.getElementById("p-plan").innerHTML = DAYS.map((d,idx)=>{
+    const isToday=d.date===today;
+    const dm=d.date.slice(8)+"."+d.date.slice(5,7);
+    return '<div class="day'+(isToday?' today':'')+'">'+
+      '<div class="dhead"><div><div class="t">'+d.dow+' — '+esc(d.title)+'</div></div><div class="d">'+dm+'</div></div>'+
+      '<div class="dbody">'+
+      d.items.map(it=>'<div class="item"><div class="time">'+esc(it.t)+'</div><div class="itxt"><div class="h">'+esc(it.h)+'</div><div class="p">'+esc(it.p)+'</div>'+placeChips(it.places)+'</div></div>').join("")+
+      tipHTML(d.tips)+'</div></div>';
+  }).join("") +
+  '<div class="block"><h2>מה הייתי משנה בתוכנית</h2>'+
+  '<p><b>יום רביעי הוא היום שיישבר ראשון.</b> חוף בבוקר ועלייה להר בערב זה הרבה ליום אחד בחופשה שהוגדרה כמנוחה. אם בסוף היום השני מתחשק פחות — לוותר על טיגאקי, לנוח, ולעלות לזיה בשלוש.</p>'+
+  '<p><b>האסקלפיון חסר בתוכנית המקורית.</b> זה האתר המשמעותי היחיד באי בטווח הליכה־רכיבה מהעיר, והוא הדבר שקוס באמת מפורסמת בזכותו. הוספתי אותו ליום חמישי אחרי החוף.</p>'+
+  '<p><b>יום ההפלגה תלוי ברוח.</b> אם התחזית ליום שלישי מראה רוח חזקה, פשוט מחליפים בינו לבין יום רביעי. שני הימים גמישים לחלוטין.</p>'+
+  '<p><b>אין יום בלי כלום.</b> בחופשה של שלושה ימים וחצי זה בסדר, אבל שווה להשאיר את בוקר יום חמישי פתוח לחלוטין ולראות איך מתעוררים.</p></div>';
+}
+
+/* ================= FOOD ================= */
+function buildChips(){
+  const m=document.getElementById("moods");
+  MOODS.forEach(mo=>{
+    const b=document.createElement("button");
+    b.className="mood"; b.textContent=mo.label; b.setAttribute("aria-pressed","false"); b.dataset.id=mo.id;
+    b.onclick=()=>{state.mood=state.mood===mo.id?null:mo.id; syncMoods(); renderFood();};
+    m.appendChild(b);
+  });
+  const cw=document.getElementById("cats");
+  Object.entries(CAT).forEach(([k,v])=>{
+    const b=document.createElement("button"); b.className="chip cat"; b.textContent=v.label;
+    b.style.setProperty("--c",v.color); b.setAttribute("aria-pressed","false");
+    b.onclick=()=>toggle(state.cats,k,b); cw.appendChild(b);
+  });
+  const aw=document.getElementById("areas");
+  Object.entries(AREA).forEach(([k,v])=>{
+    const b=document.createElement("button"); b.className="chip"; b.textContent=v; b.setAttribute("aria-pressed","false");
+    b.onclick=()=>toggle(state.areas,k,b); aw.appendChild(b);
+  });
+  const pw=document.getElementById("prices");
+  Object.entries(PRICE).forEach(([k,v])=>{
+    const b=document.createElement("button"); b.className="chip"; b.textContent=v; b.setAttribute("aria-pressed","false");
+    b.onclick=()=>toggle(state.prices,Number(k),b); pw.appendChild(b);
+  });
+}
+function toggle(set,key,btn){
+  set.has(key)?set.delete(key):set.add(key);
+  btn.setAttribute("aria-pressed",set.has(key)?"true":"false"); renderFood();
+}
+function syncMoods(){document.querySelectorAll(".mood").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===state.mood?"true":"false"));}
+
+function filtered(){
+  const mood=MOODS.find(m=>m.id===state.mood), q=state.q.trim().toLowerCase();
+  let out=PLACES.filter(p=>{
+    if(mood&&!mood.test(p))return false;
+    if(state.cats.size&&!state.cats.has(p.c))return false;
+    if(state.areas.size&&!state.areas.has(p.a))return false;
+    if(state.prices.size&&!state.prices.has(p.p))return false;
+    if(state.favOnly&&!state.favs.has(p.n))return false;
+    if(q){const hay=(p.n+" "+p.addr+" "+p.try+" "+p.desc+" "+(p.forWho||"")+" "+CAT[p.c].label).toLowerCase(); if(!hay.includes(q))return false;}
+    return true;
+  });
+  const s=state.sort;
+  out.sort((a,b)=>{
+    if(s==="rating")return (b.r||0)-(a.r||0)||(b.rv||0)-(a.rv||0);
+    if(s==="reviews")return (b.rv||0)-(a.rv||0);
+    if(s==="cheap")return a.lo-b.lo||a.hi-b.hi;
+    return a.n.localeCompare(b.n);
+  });
+  return out;
+}
+function renderFood(){
+  const data=filtered();
+  document.getElementById("count").textContent=data.length+" מקומות"+(state.favs.size?" · "+state.favs.size+" מועדפים":"");
+  const list=document.getElementById("list"); list.innerHTML="";
+  if(!data.length){list.innerHTML='<div class="empty"><b>אין התאמה לסינון הזה</b>נסה להסיר קטגוריה או לאפס את הסינון.</div>';return;}
+  data.forEach(p=>{
+    const cat=CAT[p.c], card=document.createElement("article");
+    card.className="card"; card.style.setProperty("--c",cat.color); card.dataset.n=p.n;
+    const head=document.createElement("div"); head.className="chead";
+    const titles=document.createElement("div");
+    titles.innerHTML='<div class="name">'+esc(p.n)+'</div><div class="kind">'+cat.label+' · '+AREA[p.a]+'</div>';
+    const fav=document.createElement("button");
+    fav.className="fav"; fav.setAttribute("aria-pressed",state.favs.has(p.n)?"true":"false");
+    fav.setAttribute("aria-label","מועדפים"); fav.textContent=state.favs.has(p.n)?"♥":"♡";
+    fav.onclick=()=>{state.favs.has(p.n)?state.favs.delete(p.n):state.favs.add(p.n); save("favs",state.favs); renderFood();};
+    head.append(titles,fav);
+    const stats=document.createElement("div"); stats.className="stats";
+    if(p.r) stats.innerHTML+='<span class="stat rate">★ '+p.r.toFixed(1)+' · '+p.rv.toLocaleString("he-IL")+' ביקורות</span>';
+    stats.innerHTML+='<span class="stat">'+priceText(p)+' לאדם</span>';
+    const tr=document.createElement("p"); tr.className="try"; tr.innerHTML='<b>לנסות:</b> '+esc(p.try);
+    const ad=document.createElement("p"); ad.className="addr"; ad.textContent=p.addr;
+    const acts=document.createElement("div"); acts.className="acts";
+    const map=document.createElement("a");
+    map.href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.n+", Kos, Greece");
+    map.target="_blank"; map.rel="noopener"; map.textContent="מפה";
+    const more=document.createElement("button"); more.textContent="עוד";
+    const box=document.createElement("div"); box.className="more";
+    box.innerHTML='<p>'+esc(p.desc)+'</p>'+(p.forWho?'<p><span class="lab">מתאים ל:</span> '+esc(p.forWho)+'</p>':'');
+    more.onclick=()=>{more.textContent=box.classList.toggle("open")?"פחות":"עוד";};
+    acts.append(map,more);
+    card.append(head,stats,tr,ad,acts,box);
+    list.appendChild(card);
+  });
+}
+function pickOne(){
+  const data=filtered(), box=document.getElementById("pick");
+  if(!data.length){box.className="";return;}
+  const p=data[Math.floor(Math.random()*data.length)];
+  box.className="on";
+  box.innerHTML='<div class="pickbox"><div><div class="t">ההצעה שלי עכשיו</div><div class="n">'+esc(p.n)+'</div>'+
+    '<div class="d">'+CAT[p.c].label+' · '+priceText(p)+' · '+esc(p.try)+'</div></div><button id="again">עוד אחד</button></div>';
+  document.getElementById("again").onclick=pickOne;
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hit",c.dataset.n===p.n));
+  const target=[...document.querySelectorAll(".card")].find(c=>c.dataset.n===p.n);
+  if(target) target.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function gotoPlace(name){
+  setTab("food");
+  state.mood=null; state.cats.clear(); state.areas.clear(); state.prices.clear(); state.favOnly=false;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  syncMoods();
+  state.q=name; document.getElementById("q").value=name;
+  renderFood();
+}
+
+/* ================= INFO ================= */
+function renderInfo(){
+  document.getElementById("p-info").innerHTML =
+  '<div class="block"><h2>טיסות</h2>'+
+  '<div class="kv"><span>הלוך · שני 14.9 · BZ802</span><span>08:35 TLV → 10:15 KGS</span></div>'+
+  '<div class="kv"><span>חזור · שישי 18.9 · BZ801</span><span>12:05 KGS → 13:45 TLV</span></div>'+
+  '<div class="kv"><span>חברה וכבודה</span><span>Blue Bird · 20kg</span></div>'+
+  '<div class="kv"><span>עלות כוללת</span><span>$715.77</span></div></div>'+
+
+  '<div class="block"><h2>מהשדה לעיר וחזרה</h2>'+
+  '<div class="kv"><span>אוטובוס KTEL</span><span>~4€ לאדם · 40 דק׳</span></div>'+
+  '<div class="kv"><span>מונית</span><span>35€–40€ · 25 דק׳</span></div>'+
+  '<p style="margin-top:10px">התחנה המרכזית בקוס נמצאת כ־5 דקות הליכה מהמלון. באוטובוס לשדה בכיוון החזרה — שווה לוודא את שעת היציאה יום קודם, התדירות נמוכה ולא כל שעה יש קו.</p></div>'+
+
+  '<div class="block"><h2>תחבורה באי</h2>'+
+  '<p><b>אוטובוסים:</b> קווי KTEL יוצאים מהתחנה המרכזית לטיגאקי, לזיה ולשאר האי. כרטיס נקנה בתחנה או אצל הנהג, במזומן.</p>'+
+  '<p><b>אופניים:</b> כ־5€ ליום. קוס עיר שטוחה עם שבילי אופניים אמיתיים — זו הדרך הטובה ביותר להסתובב בעיר ולחופים הקרובים.</p>'+
+  '<p><b>מוניות:</b> יש תחנה בנמל. נסיעות באי בדרך כלל במחיר קבוע ולא לפי מונה — לשאול מחיר לפני שנכנסים.</p></div>'+
+
+  '<div class="block"><h2>סלולר ואינטרנט</h2>'+
+  '<p><b>שובל — eSIM:</b> Maya Mobile או Airalo, 3–5GB בכ־6$–9$. להתקין יום לפני הטיסה ולהפעיל נדידת נתונים בנחיתה.</p>'+
+  '<p><b>חן — סים פיזי:</b> Cosmote/Germanos או Vodafone ברחוב Venizelou Eleftheriou, 4 דקות מהמלון. חבילת תיירים 12€–15€ ל־10–15GB. חובה דרכון פיזי.</p>'+
+  '<div class="note"><b>לא לקנות סים בשדה</b>יקר ומסורבל. מתחברים ל־Wi‑Fi של השדה, מפעילים את ה־eSIM, ופותחים Hotspot עד שמגיעים לעיר.</div></div>'+
+
+  '<div class="block"><h2>כסף</h2>'+
+  '<div class="kv"><span>מזומן</span><span>200€</span></div>'+
+  '<div class="kv"><span>תחבורה ואופניים</span><span>65€–70€</span></div>'+
+  '<div class="kv"><span>הפלגה וכניסות</span><span>120€–150€</span></div>'+
+  '<div class="kv"><span>צהריים ונשנושים</span><span>130€–160€</span></div>'+
+  '<div class="kv"><span>ארוחות ערב</span><span>200€–250€</span></div>'+
+  '<div class="kv"><span>קניות ומזכרות</span><span>30€–50€</span></div>'+
+  '<div class="kv"><span>סה״כ לזוג</span><span>550€–680€</span></div>'+
+  '<div class="note"><b>תמיד לשלם באירו, לא בשקלים</b>כשמסוף האשראי או הכספומט מציע לחייב בשקלים — לסרב ולבחור אירו. ההמרה שלהם גרועה בכמה אחוזים מזו של חברת האשראי. זו הטעות היקרה ביותר שתיירים עושים באירופה.</div>'+
+  '<div class="note"><b>כספומטים</b>עדיף כספומט של בנק (Alpha, Piraeus, Eurobank) על פני מכונות עצמאיות בצבע כחול־צהוב שפזורות באזורי התיירות. העמלות שם גבוהות משמעותית.</div></div>'+
+
+  '<div class="block"><h2>דברים שכדאי לדעת ביוון</h2>'+
+  '<p><b>שעות אוכל.</b> ארוחת ערב מתחילה מאוחר. לפני 20:00 המסעדות ריקות, השיא הוא 21:00–23:00.</p>'+
+  '<p><b>טיפ.</b> לא חובה ולא נכלל בחשבון. מקובל לעגל או להשאיר 5%–10% במזומן.</p>'+
+  '<p><b>דגים לפי משקל.</b> המחיר הוא לקילו. לבקש לראות את הדג ולשאול כמה זה יוצא לפני שמזמינים.</p>'+
+  '<p><b>מים.</b> מי הברז בקוס מליחים ולא נעימים לשתייה. בקבוקים זולים בסופר ויקרים על הטיילת — לקנות מראש כמה גדולים.</p>'+
+  '<p><b>קינוח על חשבון הבית.</b> מגיע כמעט תמיד בסוף ארוחה בטברנה. זה נוהג, לא טעות בחשבון.</p>'+
+  '<p><b>שמש.</b> אמצע ספטמבר הוא עדיין קיץ מלא — סביב 28–30 מעלות ביום, ים חמים, וערבים נעימים. בין 12:00 ל־16:00 השמש חזקה גם אם לא מרגישים בגלל הרוח.</p>'+
+  '<p><b>חירום.</b> 112 לכל שירותי החירום באירופה, כולל אנגלית.</p></div>'+
+
+  '<div class="block"><h2>ביוונית, לשליפה מהירה</h2>'+
+  PHRASES.map(p=>'<div class="ph"><span>'+esc(p[0])+'</span><span class="gr">'+esc(p[1])+'<small>'+esc(p[2])+'</small></span></div>').join("")+
+  '</div>';
+}
+
+/* ================= PREP ================= */
+function renderPrep(){
+  const dd=daysTo(DAYS[0].date);
+  document.getElementById("p-prep").innerHTML =
+  '<div class="block"><h2>רשימת הכנות'+(dd>0?' · '+dd+' ימים לטיסה':'')+'</h2>'+
+  '<div id="checks">'+CHECK.map((c,i)=>
+    '<div class="check" role="checkbox" tabindex="0" data-i="'+i+'" aria-checked="'+(state.done.has(String(i))?"true":"false")+'">'+
+    '<div class="box">✓</div><div class="ctxt">'+esc(c.t)+'<small>'+esc(c.s)+'</small></div></div>').join("")+
+  '</div></div>'+
+  '<div class="block"><h2>מה כדאי לסגור עוד מהארץ</h2>'+
+  '<p><b>שולחן ב־Barbouni ליום חמישי.</b> זו הארוחה החגיגית של החופשה, והמקום מלא. הודעה או שיחה מראש שווה את הטרחה.</p>'+
+  '<p><b>שולחן ב־Oromedon בזיה ליום רביעי, ולבקש במפורש שולחן על המרפסת.</b> ההבדל בין שולחן פנימי לשולחן על הקצה הוא כל הסיבה לעלות להר.</p>'+
+  '<p><b>ההפלגה ל־3 האיים — דווקא לא מראש.</b> להזמין בדוכן על הרציף ביום הראשון, אחרי שרואים את תחזית הרוח. אותו מחיר, ואפשר להחליף יום אם צריך.</p></div>';
+  document.querySelectorAll(".check").forEach(el=>{
+    const t=()=>{
+      const i=el.dataset.i, on=el.getAttribute("aria-checked")==="true";
+      el.setAttribute("aria-checked",on?"false":"true");
+      on?state.done.delete(i):state.done.add(i);
+      save("done",state.done);
+      if(state.tab==="now") renderNow();
+    };
+    el.onclick=t;
+    el.onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();t();}};
+  });
+}
+
+/* ================= WIRING ================= */
+document.addEventListener("click",e=>{
+  const p=e.target.closest("[data-place]");
+  if(p){gotoPlace(p.dataset.place);return;}
+  const g=e.target.closest("[data-go]");
+  if(g){setTab(g.dataset.go);return;}
+  const dh=e.target.closest(".dhead");
+  if(dh){const b=dh.nextElementSibling; b.style.display = b.style.display==="none"?"":"none";}
+});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value;renderFood();});
+document.getElementById("sort").addEventListener("change",e=>{state.sort=e.target.value;renderFood();});
+document.getElementById("favOnly").addEventListener("click",e=>{
+  state.favOnly=!state.favOnly; e.target.setAttribute("aria-pressed",state.favOnly?"true":"false"); renderFood();
+});
+document.getElementById("toggleFilters").addEventListener("click",e=>{
+  const f=document.getElementById("filters"), show=f.hasAttribute("hidden");
+  show?f.removeAttribute("hidden"):f.setAttribute("hidden","");
+  e.target.setAttribute("aria-expanded",show?"true":"false");
+});
+document.getElementById("reset").addEventListener("click",()=>{
+  state.mood=null;state.cats.clear();state.areas.clear();state.prices.clear();state.q="";state.favOnly=false;
+  document.getElementById("q").value="";
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed","false"));
+  document.getElementById("favOnly").setAttribute("aria-pressed","false");
+  syncMoods(); document.getElementById("pick").className=""; renderFood();
+});
+document.getElementById("pickBtn").addEventListener("click",pickOne);
+document.getElementById("topBtn").addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+
+buildChips();
+function renderAll(){renderNow();renderPlan();renderFood();renderInfo();renderPrep();}
+renderAll();
+setTab("now");
+load().then(renderAll).then(()=>setTab(state.tab));
+</script>
+</body>
+</html>
