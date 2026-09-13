@@ -43,6 +43,15 @@ section[hidden]{display:none}
 .kv{display:flex;justify-content:space-between;gap:12px;font-size:14.5px;padding:7px 0;border-bottom:1px dashed var(--line)}
 .kv:last-child{border-bottom:none}
 .kv span:last-child{font-weight:700;text-align:left;direction:ltr}
+.budgetwrap{overflow-x:auto;margin:0 -2px}
+table.budget{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px}
+table.budget th{background:var(--chalk);text-align:right;padding:7px 8px;font-size:11.5px;font-weight:800;color:var(--ink-soft);border-bottom:2px solid var(--line)}
+table.budget td{padding:8px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+table.budget td:first-child{font-weight:700}
+table.budget td.pay{white-space:nowrap;font-weight:700}
+table.budget td.pay.cash{color:var(--tile)}
+table.budget td.pay.card{color:var(--sea)}
+table.budget td.note{color:var(--ink-soft);font-size:11.5px}
 .note{border-inline-start:4px solid var(--lemon);background:#FDF6E0;border-radius:8px;padding:10px 12px;font-size:14px;margin:10px 0 0}
 .note b{display:block;margin-bottom:2px}
 .warn{border-inline-start:4px solid var(--tile);background:#F8ECE7}
@@ -384,6 +393,7 @@ const DAYS = [
 
 const PREP = [
  {cat:"לפני הנסיעה", items:[
+   {t:"לקנות קרם הגנה (אם אין בבית)",s:"SPF 30/50, כולל שפתון עם הגנה. עדיף לקנות בארץ — בקוס יקר יותר ולא תמיד יש מבחר"},
    {t:"להתקין את ה־eSIM עוד בארץ",s:"Maya Mobile או Airalo, 3–5GB. ההתקנה דורשת אינטרנט — לא לחכות לנחיתה"},
    {t:"הדרכון הפיזי של חן בתיק היד",s:"נדרש בחנות הסלולר בקוס לרישום הסים"},
    {t:"להוריד מפת קוס לשימוש אופליין",s:"ב־Google Maps: חיפוש Kos ← Download offline map. חוסך תלות בקליטה"},
@@ -396,7 +406,7 @@ const PREP = [
    {t:"דרכונים בתוקף",s:"לוודא תוקף של 6 חודשים קדימה"},
    {t:"אישור הזמנת המלון ופוליסת ביטוח נסיעות לחו״ל",s:""},
    {t:"כרטיס אשראי בינלאומי בלי עמלות מט״ח",s:"ועוד כרטיס גיבוי שני, לא באותו ארנק"},
-   {t:"200€–150€ מזומן, כולל שטרות קטנים",s:"מס תיירות במלון, תחבורה, מיטות שיזוף וטיפים"},
+   {t:"470€ מזומן, כולל שטרות קטנים",s:"מוניות לשדה, מס תיירות, תחבורה באי וטיפים — ר׳ פירוט בלשונית מידע ← כסף"},
    {t:"רישיון נהיגה בינלאומי + ישראלי",s:"למקרה שתרצו לשכור קטנוע/באגי/רכב בספונטניות"}
  ]},
  {cat:"ביגוד והנעלה", items:[
@@ -691,13 +701,23 @@ function renderInfo(){
   '<div class="note"><b>לא לקנות סים בשדה</b>יקר ומסורבל. מתחברים ל־Wi‑Fi של השדה, מפעילים את ה־eSIM, ופותחים Hotspot עד שמגיעים לעיר.</div></div>'+
 
   '<div class="block"><h2>כסף</h2>'+
-  '<div class="kv"><span>מזומן</span><span>200€</span></div>'+
-  '<div class="kv"><span>תחבורה ואופניים</span><span>65€–70€</span></div>'+
-  '<div class="kv"><span>הפלגה וכניסות</span><span>120€–150€</span></div>'+
-  '<div class="kv"><span>צהריים ונשנושים</span><span>130€–160€</span></div>'+
-  '<div class="kv"><span>ארוחות ערב</span><span>200€–250€</span></div>'+
-  '<div class="kv"><span>קניות ומזכרות</span><span>30€–50€</span></div>'+
-  '<div class="kv"><span>סה״כ לזוג</span><span>550€–680€</span></div>'+
+  '<p style="margin-top:0"><b>470€ מזומן ביחד עם אשראי בלי עמלת מט״ח</b> נותנים גמישות מלאה — כולל שני כיווני מונית לשדה, מס התיירות וכל התחבורה, ועדיין נשארת יתרת ביטחון כדי לא לפרוט שטרות נוספים או לחזור עם עודף.</p>'+
+  '<div class="budgetwrap"><table class="budget"><tr><th>סעיף</th><th>עלות</th><th>אמצעי תשלום</th><th>הערות</th></tr>'+
+  '<tr><td>מוניות לשדה (הלוך + חזור)</td><td>70€–80€</td><td class="pay cash">מזומן</td><td class="note">כ־35€–40€ לכיוון. לנהגים בקוס עדיפות למזומן, פחות עיכובים עם מסופים.</td></tr>'+
+  '<tr><td>מס תיירות (4 לילות)</td><td>40€</td><td class="pay card">אשראי / מזומן</td><td class="note">10€ לחדר ללילה. לרוב ניתן לשלם באשראי בקבלה; אם נדרש מזומן — יש כיסוי מלא.</td></tr>'+
+  '<tr><td>תחבורה באי + אופניים</td><td>55€–60€</td><td class="pay cash">מזומן</td><td class="note">אוטובוס לטיגאקי ולזיה, השכרת אופניים ליומיים (כ־20€ לזוג).</td></tr>'+
+  '<tr><td>טיפים ונשנושי רחוב</td><td>40€–50€</td><td class="pay cash">מזומן</td><td class="note">ג׳יירוס ברחוב, עיגול חשבון/טיפ בטברנות, שתייה בדוכנים.</td></tr>'+
+  '<tr><td>סים לחן (Cosmote)</td><td>12€–15€</td><td class="pay card">אשראי / מזומן</td><td class="note">בסניף הרשמי מקבלים אשראי רגיל. חובה דרכון פיזי.</td></tr>'+
+  '<tr><td>הפלגת 3 האיים + כניסות</td><td>95€–120€</td><td class="pay card">אשראי</td><td class="note">תשלום בדוכני הרציף בנמל ובקופות האתרים.</td></tr>'+
+  '<tr><td>ארוחות ערב (4 ערבים)</td><td>200€–250€</td><td class="pay card">אשראי</td><td class="note">כל הטברנות מחויבות ב־POS. לסרב תמיד להמרת מט״ח — לבחור EUR.</td></tr>'+
+  '<tr><td>ארוחות צהריים בחוף</td><td>80€–110€</td><td class="pay card">אשראי</td><td class="note">ברוב מסעדות החוף והטברנות מקבלים אשראי.</td></tr>'+
+  '<tr><td>סופרמרקט, מזכרות וקניות</td><td>40€–60€</td><td class="pay card">אשראי</td><td class="note">מים, גבינות, דבש ומתנות.</td></tr>'+
+  '</table></div>'+
+  '<h3>ניהול ה־470€ מזומן בשטח</h3>'+
+  '<div class="kv"><span>הוצאות הכרחיות במזומן</span><span>180€–200€</span></div>'+
+  '<div class="kv"><span>אם גם מס התיירות במזומן</span><span>220€–240€</span></div>'+
+  '<div class="kv"><span>יתרת ביטחון חופשית</span><span>230€–250€</span></div>'+
+  '<div class="note"><b>אסטרטגיה מומלצת.</b> שני–רביעי: לשלם באשראי כברירת מחדל בכל מקום שמקבל (מסעדות, הפלגה, קניות). מיום חמישי: לבדוק כמה מזומן נשאר מעבר ל־40€ ששמורים למונית חזרה לשדה — ואם יש עודף גבוה, להתחיל לשלם איתו על ארוחת יום חמישי ועל השוק, כדי לא לחזור עם שטרות עודפים.</div>'+
   '<div class="note"><b>תמיד לשלם באירו, לא בשקלים</b>כשמסוף האשראי או הכספומט מציע לחייב בשקלים — לסרב ולבחור אירו. ההמרה שלהם גרועה בכמה אחוזים מזו של חברת האשראי. זו הטעות היקרה ביותר שתיירים עושים באירופה.</div>'+
   '<div class="note"><b>כספומטים</b>עדיף כספומט של בנק (Alpha, Piraeus, Eurobank) על פני מכונות עצמאיות בצבע כחול־צהוב שפזורות באזורי התיירות. העמלות שם גבוהות משמעותית.</div></div>'+
 
